@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nokia 3220 Composer Pro</title>
+    <style>
+        :root {
+            --nokia-screen: #c7d1af;
+            --nokia-dark: #2b3003;
+            --glow-color: transparent;
+        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body {
+            background: #1a1a1a; margin: 0; display: flex; justify-content: center;
+            align-items: center; height: 100vh; overflow: hidden;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .phone-wrapper { position: relative; display: flex; justify-content: center; align-items: center; }
+        
+        /* Yan Işıklar */
+        .side-glow {
+            position: absolute; width: 25px; height: 70%; border-radius: 50px;
+            background: var(--glow-color); filter: blur(20px); transition: 0.1s;
+            opacity: 0; z-index: 1;
+        }
+        .glow-left { left: -35px; }
+        .glow-right { right: -35px; }
+
+        .phone-body {
+            background: #e0e0e0; width: 320px; height: 90vh; max-height: 720px;
+            border-radius: 50px 50px 100px 100px; border: 4px solid #aaa;
+            padding: 20px; display: flex; flex-direction: column; align-items: center;
+            position: relative; z-index: 2; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        /* Ekran Tasarımı */
+        .screen-frame {
+            background: #333; width: 100%; height: 35%; padding: 10px;
+            border-radius: 10px; border: 3px solid #555;
+        }
+        .screen {
+            background: var(--nokia-screen); width: 100%; height: 100%;
+            color: var(--nokia-dark); padding: 8px; display: flex; flex-direction: column;
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.2);
+        }
+        .screen-head { display: flex; justify-content: space-between; font-size: 11px; font-weight: bold; border-bottom: 1px solid #7a855c; margin-bottom: 5px; }
+        #display-text { 
+            font-size: 16px; font-weight: bold; word-wrap: break-word; 
+            overflow-y: auto; line-height: 1.4; flex: 1; 
+        }
+
+        /* Kontrol Paneli */
+        .controls { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; margin: 15px 0; }
+        .btn-ctrl {
+            background: #fdfdfd; border: 1px solid #bbb; padding: 10px;
+            border-radius: 10px; font-size: 11px; font-weight: bold; cursor: pointer;
+            box-shadow: 0 3px 0 #999;
+        }
+        .btn-ctrl:active { transform: translateY(2px); box-shadow: 0 1px 0 #999; }
+
+        /* Tuş Takımı */
+        .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; flex: 1; }
+        .key {
+            background: #fff; color: #333; border-radius: 20px; border: 1px solid #ccc;
+            cursor: pointer; font-size: 1.2rem; font-weight: bold; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; box-shadow: 0 4px 0 #bbb;
+        }
+        .key span { font-size: 8px; color: #888; text-transform: uppercase; }
+        .key:active { transform: scale(0.95); background: #eee; }
+
+        .indicator-row { font-size: 10px; display: flex; gap: 10px; margin-top: 5px; color: #555; }
+    </style>
+</head>
+<body>
+
+<div class="phone-wrapper">
+    <div id="glowL" class="side-glow glow-left"></div>
+    <div id="glowR" class="side-glow glow-right"></div>
+
+    <div class="phone-body">
+        <div style="color:#888; font-size:12px; font-weight:bold; margin-bottom:8px;">NOKIA</div>
+        
+        <div class="screen-frame">
+            <div class="screen">
+                <div class="screen-head">
+                    <span id="mod-indicator" onclick="toggleMode()" style="cursor:pointer; background:rgba(0,0,0,0.1); padding:0 4px;">🎹 MONO</span>
+                    <span id="speed-label">2.0x</span>
+                    <span>🔋</span>
+                </div>
+                <div id="song-label" style="font-size: 10px; font-weight: bold; margin: 4px 0;">Besteci: Boş</div>
+                <div id="display-text"></div>
+                <div class="indicator-row">
+                    <span id="cur-len">Süre: 4</span>
+                    <span id="cur-oct">Okt: 2</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn-ctrl" onclick="nextSong()">KÜTÜPHANE ❯</button>
+            <button class="btn-ctrl" onclick="nextSpeed()">HIZI DEĞİŞTİR</button>
+            <button class="btn-ctrl" style="background:#4caf50; color:white;" onclick="playMelody()">▶ OYNAT</button>
+            <button class="btn-ctrl" style="background:#f44336; color:white;" onclick="stop()">■ DURDUR</button>
+        </div>
+
+        <div class="keypad">
+            <button class="key" onclick="addNote('c')">1<span>do</span></button>
+            <button class="key" onclick="addNote('d')">2<span>re</span></button>
+            <button class="key" onclick="addNote('e')">3<span>mi</span></button>
+            <button class="key" onclick="addNote('f')">4<span>fa</span></button>
+            <button class="key" onclick="addNote('g')">5<span>sol</span></button>
+            <button class="key" onclick="addNote('a')">6<span>la</span></button>
+            <button class="key" onclick="addNote('b')">7<span>si</span></button>
+            <button class="key" onclick="cycleLength()">8<span>süre</span></button>
+            <button class="key" onclick="cycleOctave()">9<span>oktav</span></button>
+            <button class="key" onclick="addSharp()">*<span>#</span></button>
+            <button class="key" onclick="addNote('p')">0<span>es</span></button>
+            <button class="key" onclick="clearAll()">C<span>sil</span></button>
+        </div>
+        
+        <button class="btn-ctrl" style="width:100%; margin-top:10px; background:#2196f3; color:white;" onclick="exportWav()">💾 WAV OLARAK İNDİR</button>
+    </div>
+</div>
+
+<script>
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    let audioMode = 'mono';
+    let currentLength = 4;
+    let currentOctave = 2;
+    
+    const library = [
+        { name: "Nokia Tune", notes: ["8e2", "8d2", "4f#1", "4g#1", "8b1", "8a1", "4c#1", "4e1", "8f#1", "8e1", "4g#0", "4b0", "2e1"] },
+        { name: "Snake Game", notes: ["16c2", "16g1", "16c2", "16g1", "16d2", "16g1", "16d2", "16g1", "8e2", "8e2"] },
+        { name: "Turkish March", notes: ["8b1", "8a1", "8g#1", "8a1", "4c2", "8d2", "8c2", "8b1", "8c2", "4e2", "8f2", "8e2", "8d#2", "8e2", "8b2", "8a2", "8g#2", "8a2", "8b2", "8a2", "8g#2", "8a2", "4c3"] },
+        { name: "Super Mario", notes: ["8e2", "8e2", "8p", "8e2", "8p", "8c2", "8e2", "8p", "8g2", "4p", "8g1"] },
+        { name: "Kick (Nokia)", notes: ["16e2","16e2","16e2","8e2","16d2","16d2","16d2","8d2","8c2","8g1"] }
+    ];
+
+    let melody = [];
+    let speed = 2.0; 
+    let isPlaying = false; 
+    let activeOscs = [];
+    const freqs = {'c':261.63, 'c#':277.18, 'd':293.66, 'd#':311.13, 'e':329.63, 'f':349.23, 'f#':369.99, 'g':392.00, 'g#':415.30, 'a':440.00, 'a#':466.16, 'b':493.88, 'p':0};
+    let libIdx = -1;
+
+    function toggleMode() {
+        audioMode = (audioMode === 'mono') ? 'poly' : 'mono';
+        document.getElementById('mod-indicator').innerText = (audioMode === 'mono' ? '🎹 MONO' : '🎻 POLİ');
+        audioCtx.resume();
+    }
+
+    function cycleLength() {
+        const lengths = [4, 8, 16, 32];
+        currentLength = lengths[(lengths.indexOf(currentLength) + 1) % lengths.length];
+        document.getElementById('cur-len').innerText = "Süre: " + currentLength;
+    }
+
+    function cycleOctave() {
+        currentOctave = (currentOctave % 3) + 1;
+        document.getElementById('cur-oct').innerText = "Okt: " + currentOctave;
+    }
+
+    function updateGlow(on) {
+        const l = document.getElementById('glowL'), r = document.getElementById('glowR');
+        if(on) {
+            const colors = ["#ff0000", "#00ff00", "#0000ff", "#00ffff", "#ff00ff"];
+            const c = colors[Math.floor(Math.random()*colors.length)];
+            l.style.opacity = r.style.opacity = "1";
+            l.style.setProperty('--glow-color', c); r.style.setProperty('--glow-color', c);
+        } else { l.style.opacity = r.style.opacity = "0"; }
+    }
+
+    async function playTone(freq, duration, destination = audioCtx.destination) {
+        if (freq === 0) return new Promise(r => setTimeout(r, duration * 1000));
+        
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        if (audioMode === 'mono') {
+            osc.type = 'square';
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        } else {
+            osc.type = 'triangle';
+            gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+        }
+
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        osc.connect(gain); gain.connect(destination);
+        osc.start(); activeOscs.push(osc);
+        
+        updateGlow(true);
+        setTimeout(() => updateGlow(false), duration * 700);
+        return new Promise(r => {
+            setTimeout(() => {
+                osc.stop();
+                r();
+            }, duration * 1000);
+        });
+    }
+
+    async function playMelody(destination = audioCtx.destination) {
+        if (isPlaying) stop();
+        if (melody.length === 0) return;
+        isPlaying = true;
+        for (let item of melody) {
+            if (!isPlaying) break;
+            let m = item.match(/(\d+)([a-g,p]#?)(\d)/);
+            if (!m) continue;
+            let freq = freqs[m[2]] * Math.pow(2, parseInt(m[3]) - 1);
+            let duration = (1.0 / (parseInt(m[1]) / 4)) / speed;
+            await playTone(freq, duration, destination);
+        }
+        isPlaying = false;
+    }
+
+    function stop() { 
+        isPlaying = false; 
+        activeOscs.forEach(o => { try{o.stop();}catch(e){} }); 
+        activeOscs = []; 
+        updateGlow(false);
+    }
+
+    function nextSong() {
+        stop(); 
+        libIdx = (libIdx + 1) % library.length;
+        melody = [...library[libIdx].notes];
+        document.getElementById('song-label').innerText = "Melodi: " + library[libIdx].name;
+        renderDisplay();
+    }
+
+    function addNote(n) {
+        stop();
+        melody.push(`${currentLength}${n}${currentOctave}`);
+        renderDisplay();
+    }
+
+    function addSharp() {
+        if (melody.length === 0) return;
+        let last = melody[melody.length - 1];
+        if (!last.includes('#') && !last.includes('p')) {
+            melody[melody.length - 1] = last.replace(/([a-g])/, '$1#');
+            renderDisplay();
+        }
+    }
+
+    function renderDisplay() {
+        document.getElementById('display-text').innerText = melody.join(' ');
+    }
+
+    function clearAll() {
+        stop(); melody = []; libIdx = -1;
+        document.getElementById('song-label').innerText = "Besteci: Boş";
+        renderDisplay();
+    }
+
+    function nextSpeed() {
+        const lvls = [1.0, 1.5, 2.0, 3.0, 4.0];
+        speed = lvls[(lvls.indexOf(speed) + 1) % lvls.length];
+        document.getElementById('speed-label').innerText = speed.toFixed(1) + "x";
+    }
+
+    async function exportWav() {
+        const dest = audioCtx.createMediaStreamDestination();
+        const recorder = new MediaRecorder(dest.stream);
+        const chunks = [];
+        recorder.ondataavailable = e => chunks.push(e.data);
+        recorder.onstop = () => {
+            const blob = new Blob(chunks, { type: 'audio/wav' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = `nokia_ringtone.wav`;
+            a.click();
+        };
+        recorder.start();
+        await playMelody(dest);
+        setTimeout(() => recorder.stop(), 500);
+    }
+</script>
+</body>
+</html>
