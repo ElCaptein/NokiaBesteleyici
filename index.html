@@ -3,54 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nokia 3220 Composer Ultra</title>
+    <title>Nokia 3220 Master - PC & iOS Ready</title>
     <style>
-        :root { --nokia-screen: #8ea30a; --nokia-dark: #202402; }
+        :root { --nokia-screen: #94b411; --nokia-dark: #2b3003; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
         body { background: #000; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; font-family: 'Courier New', monospace; }
 
-        .phone-body {
-            background: #2a2a2a; width: 310px; height: 92vh; max-height: 700px;
-            border-radius: 50px 50px 90px 90px; border: 4px solid #444;
+        .phone {
+            background: #1a1a1a; width: 320px; height: 95vh; max-height: 750px;
+            border-radius: 50px 50px 100px 100px; border: 4px solid #333;
             padding: 15px; display: flex; flex-direction: column; align-items: center;
-            position: relative; box-shadow: 0 0 50px #000;
+            position: relative; box-shadow: 0 0 50px #000; z-index: 5;
         }
 
-        .screen-frame { background: #000; width: 100%; height: 35%; padding: 6px; border-radius: 10px; border: 2px solid #555; margin-top: 10px; }
-        .screen { background: var(--nokia-screen); width: 100%; height: 100%; color: var(--nokia-dark); padding: 8px; display: flex; flex-direction: column; }
-        #display-text { font-size: 13px; font-weight: bold; flex: 1; word-break: break-all; overflow-y: auto; line-height: 1.2; }
+        .screen-frame { background: #000; width: 100%; height: 32%; padding: 6px; border-radius: 8px; border: 2px solid #444; margin-top: 5px; }
+        .screen { background: var(--nokia-screen); width: 100%; height: 100%; color: var(--nokia-dark); padding: 8px; display: flex; flex-direction: column; position: relative; }
+        #display-text { font-size: 11px; font-weight: bold; flex: 1; word-break: break-all; overflow-y: auto; line-height: 1.1; margin-top: 5px; }
 
-        .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin: 12px 0; }
-        .btn-ctrl { background: #333; color: white; border: 1px solid #666; padding: 10px; border-radius: 8px; font-size: 10px; cursor: pointer; font-weight: bold; }
+        .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; width: 100%; margin: 10px 0; }
+        .btn-ctrl { background: #222; color: white; border: 1px solid #444; padding: 10px; border-radius: 6px; font-size: 9px; cursor: pointer; font-weight: bold; }
+        .btn-ctrl:active { background: #444; }
 
-        .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 100%; flex: 1; }
-        .key { background: #1a1a1a; color: #eee; border-radius: 12px; border: 1px solid #333; cursor: pointer; font-size: 1.1rem; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 3px #000; position: relative; }
-        .key span { font-size: 7px; color: #777; margin-top: 2px; }
-        .key:active { transform: translateY(2px); box-shadow: 0 1px #000; background: #222; }
+        .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; width: 100%; flex: 1; }
+        .key { background: #0a0a0a; color: #eee; border-radius: 12px; border: 1px solid #222; cursor: pointer; font-size: 1.1rem; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 3px #000; }
+        .key.active { background: #333; transform: translateY(2px); box-shadow: 0 1px #000; }
+        .key span { font-size: 7px; color: #555; }
 
-        /* Işıklar */
-        .side-glow { position: absolute; width: 25px; height: 60%; border-radius: 40px; filter: blur(20px); opacity: 0; transition: 0.1s; z-index: 1; }
-        #glowL { left: -35px; top: 15%; } #glowR { right: -35px; top: 15%; }
+        .side-glow { position: absolute; width: 30px; height: 60%; border-radius: 40px; filter: blur(25px); opacity: 0; transition: 0.05s; z-index: 1; }
+        #glowL { left: -40px; top: 15%; } #glowR { right: -40px; top: 15%; }
+        #rec-dot { color: #d00; font-weight: bold; display: none; position: absolute; right: 8px; top: 20px; font-size: 10px; }
     </style>
 </head>
-<body onclick="initAudio()">
+<body onkeydown="handleKeyboard(event)">
 
 <div id="glowL" class="side-glow"></div>
 <div id="glowR" class="side-glow"></div>
 
-<div class="phone-body">
-    <div style="color:#666; font-size:10px; margin-bottom:5px;">NOKIA 3220 COMPOSER</div>
-    
+<div class="phone">
+    <div style="color:#555; font-size:9px; margin-bottom:5px;">NOKIA 3220 PRO-SYNC</div>
     <div class="screen-frame">
         <div class="screen">
-            <div style="display: flex; justify-content: space-between; font-size: 10px; border-bottom: 1px solid">
-                <span id="mod-indicator" onclick="toggleMode()">🎹 MONO</span>
-                <span id="speed-label">2.0x</span>
-                <span>📶🔋</span>
+            <div style="display: flex; justify-content: space-between; font-size: 9px; border-bottom: 1px solid">
+                <span>MONO V4</span> <span id="speed-label">2.0x</span> <span>📶🔋</span>
             </div>
-            <div id="song-label" style="font-size: 10px; font-weight: bold; margin: 4px 0;">HAZIR</div>
-            <div id="display-text">SESİ AÇMAK İÇİN HERHANGİ BİR TUŞA BASIN</div>
-            <div style="font-size: 9px; margin-top: 2px; border-top: 1px solid">
+            <div id="rec-dot">● REC</div>
+            <div id="song-label" style="font-size: 9px; font-weight: bold; margin: 4px 0;">HAZIR</div>
+            <div id="display-text">KLAVYE (1-9) VEYA EKRANA TIKLAYARAK SESİ AÇIN</div>
+            <div style="font-size: 8px; border-top: 1px solid; padding-top:2px; margin-top: auto;">
                 <span id="cur-len">Süre: 8</span> | <span id="cur-oct">Okt: 2</span>
             </div>
         </div>
@@ -58,24 +57,25 @@
 
     <div class="controls">
         <button class="btn-ctrl" onclick="nextSong()">KÜTÜPHANE ❯</button>
-        <button class="btn-ctrl" onclick="playMelody()" style="background:#1e461b">▶ OYNAT</button>
+        <button class="btn-ctrl" onclick="playMelody()" style="background:#1b4d1a">▶ OYNAT</button>
         <button class="btn-ctrl" onclick="stop()">■ DUR</button>
-        <button class="btn-ctrl" onclick="clearAll()">SİL</button>
+        <button class="btn-ctrl" onclick="exportWav()" style="background:#4d1a1a">💾 WAV AKTAR</button>
+        <button class="btn-ctrl" onclick="clearAll()" style="grid-column: span 2;">TEMİZLE</button>
     </div>
 
     <div class="keypad">
-        <button class="key" onclick="addNote('c')">1<span>do</span></button>
-        <button class="key" onclick="addNote('d')">2<span>re</span></button>
-        <button class="key" onclick="addNote('e')">3<span>mi</span></button>
-        <button class="key" onclick="addNote('f')">4<span>fa</span></button>
-        <button class="key" onclick="addNote('g')">5<span>sol</span></button>
-        <button class="key" onclick="addNote('a')">6<span>la</span></button>
-        <button class="key" onclick="addNote('b')">7<span>si</span></button>
-        <button class="key" onclick="cycleLength()">8<span>süre</span></button>
-        <button class="key" onclick="cycleOctave()">9<span>oktav</span></button>
-        <button class="key" onclick="addSharp()">*<span>#</span></button>
-        <button class="key" onclick="addNote('p')">0<span>es</span></button>
-        <button class="key" onclick="nextSpeed()">#<span>hız</span></button>
+        <button class="key" id="key-c" onclick="handleKey('c')">1<span>do</span></button>
+        <button class="key" id="key-d" onclick="handleKey('d')">2<span>re</span></button>
+        <button class="key" id="key-e" onclick="handleKey('e')">3<span>mi</span></button>
+        <button class="key" id="key-f" onclick="handleKey('f')">4<span>fa</span></button>
+        <button class="key" id="key-g" onclick="handleKey('g')">5<span>sol</span></button>
+        <button class="key" id="key-a" onclick="handleKey('a')">6<span>la</span></button>
+        <button class="key" id="key-b" onclick="handleKey('b')">7<span>si</span></button>
+        <button class="key" id="key-len" onclick="cycleLength()">8<span>süre</span></button>
+        <button class="key" id="key-oct" onclick="cycleOctave()">9<span>oktav</span></button>
+        <button class="key" id="key-sharp" onclick="addSharp()">*<span>#</span></button>
+        <button class="key" id="key-p" onclick="handleKey('p')">0<span>es</span></button>
+        <button class="key" id="key-speed" onclick="nextSpeed()">#<span>hız</span></button>
     </div>
 </div>
 
@@ -87,67 +87,84 @@
     let speed = 2.0;
     let currentLength = 8;
     let currentOctave = 2;
-    let audioMode = 'mono';
 
     const library = [
-        { 
-            name: "TURKISH MARCH (FULL)", 
-            notes: [
-                "8b1", "8a1", "8g#1", "8a1", "4c2", "8p", "8d2", "8c2", "8b1", "8c2", "4e2", "8p", "8f2", "8e2", "8d#2", "8e2", 
-                "8b2", "8a2", "8g#2", "8a2", "8b2", "8a2", "8g#2", "8a2", "4c3", "8p", "8a2", "8g2", "8f#2", "8g2", "4b2", "8p",
-                "8a2", "8g2", "8f#2", "8g2", "4b2", "8p", "8d2", "8c2", "8b1", "8c2", "4e2"
-            ] 
-        },
-        { name: "NOKIA TUNE", notes: ["8e2", "8d2", "4f#1", "4g#1", "8b1", "8a1", "4c#1", "4e1", "8f#1", "8e1", "4g#0", "4b0", "2e1"] },
-        { name: "SUPER MARIO", notes: ["8e2", "8e2", "8p", "8e2", "8p", "8c2", "8e2", "4g2", "4g1"] }
+        { name: "TURKISH MARCH", notes: ["8b1","8a1","8g#1","8a1","4c2","8p","8d2","8c2","8b1","8c2","4e2","8p","8f2","8e2","8d#2","8e2","8b2","8a2","8g#2","8a2","8b2","8a2","8g#2","8a2","4c3","8p","8a2","8g2","8f#2","8g2","4b2","8p","8a2","8g2","8f#2","8g2","4b2","8p","8d2","8c2","8b1","8c2","4e2","8p","8f2","8e2","8d#2","8e2","2a2"] },
+        { name: "NOKIA TUNE", notes: ["8e2","8d2","4f#1","4g#1","8b1","8a1","4c#1","4e1","8f#1","8e1","4g#0","4b0","2e1"] },
+        { name: "MISSION IMP", notes: ["16g1","16g1","16a#1","16c2","16g1","16g1","16f1","16f#1"] },
+        { name: "AXEL F", notes: ["8g1","8a#1","8g1","16g1","8c2","8g1","8f1","8g1","8d2","8g1","16g1","8d#2","8d2","8a#1","8g1","8d2","8g2","16g1","8f1","16f1","8d1","8a1","2g1"] },
+        { name: "KICK VIBE", notes: ["16e2","32e2","32e2","8e2","16d2","32d2","32d2","8d2","16c2","16g1"] },
+        { name: "BOND 007", notes: ["4c1","8d1","8d1","4d1","2d1","4c1","4c1","4c1","4c1","8d#1","8d#1","2d#1","4d1","4d1","4d1"] },
+        { name: "HABABAM", notes: ["4c2","8d2","8c2","4b1","4a1","4g1","4a1","4b1","2c2"] }
     ];
     let libIdx = -1;
 
     const freqs = {'c':261.63, 'c#':277.18, 'd':293.66, 'd#':311.13, 'e':329.63, 'f':349.23, 'f#':369.99, 'g':392.00, 'g#':415.30, 'a':440.00, 'a#':466.16, 'b':493.88, 'p':0};
 
-    function initAudio() {
+    // iOS ve PC için AudioContext Kilidini Açan Fonksiyon
+    function wakeAudio() {
         if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         if (audioCtx.state === 'suspended') audioCtx.resume();
     }
 
-    function toggleMode() {
-        initAudio();
-        audioMode = (audioMode === 'mono') ? 'poly' : 'mono';
-        document.getElementById('mod-indicator').innerText = (audioMode === 'mono' ? '🎹 MONO' : '🎻 POLİ');
+    // Donanım Seviyesinde Ses Temizliği (Üst üste binmeyi önler)
+    function clearHardware() {
+        activeOscs.forEach(osc => { try { osc.stop(); osc.disconnect(); } catch (e) {} });
+        activeOscs = [];
     }
 
-    async function playTone(freq, duration, isPreview = false) {
-        initAudio();
+    // Klavye Desteği
+    function handleKeyboard(e) {
+        const keyMap = {
+            '1':'c', '2':'d', '3':'e', '4':'f', '5':'g', '6':'a', '7':'b', '0':'p',
+            '8':'len', '9':'oct', '*':'sharp', '#':'speed'
+        };
+        const val = keyMap[e.key];
+        if (!val) return;
+        
+        // Görsel efekt için butonu bul
+        let btnId = (val === 'len' || val === 'oct' || val === 'sharp' || val === 'speed') ? `key-${val}` : `key-${val}`;
+        if(document.getElementById(btnId)) {
+            const btn = document.getElementById(btnId);
+            btn.classList.add('active');
+            setTimeout(() => btn.classList.remove('active'), 100);
+        }
+
+        if(['c','d','e','f','g','a','b','p'].includes(val)) handleKey(val);
+        else if(val === 'len') cycleLength();
+        else if(val === 'oct') cycleOctave();
+        else if(val === 'sharp') addSharp();
+        else if(val === 'speed') nextSpeed();
+    }
+
+    async function playTone(freq, duration, targetNode, isKey = false) {
+        wakeAudio();
         if (freq === 0) return new Promise(r => setTimeout(r, duration * 1000));
         
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
 
-        // Mono'da kare dalga (eski 8-bit sesi), Poli'de üçgen dalga
-        osc.type = (audioMode === 'mono') ? 'square' : 'triangle';
-        gain.gain.setValueAtTime(isPreview ? 0.05 : 0.1, audioCtx.currentTime);
-        if(!isPreview && audioMode === 'poly') {
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
-        }
-
+        osc.type = 'square'; // Monofonik keskin dalga
+        gain.gain.setValueAtTime(isKey ? 0.05 : 0.08, audioCtx.currentTime);
         osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        
         osc.connect(gain);
-        gain.connect(audioCtx.destination);
+        gain.connect(targetNode || audioCtx.destination);
         
         osc.start();
         activeOscs.push(osc);
         
-        flashGlow();
+        if (!isKey) flashGlow();
+
         return new Promise(r => {
-            setTimeout(() => {
-                osc.stop();
-                r();
-            }, duration * 1000);
+            setTimeout(() => { try { osc.stop(); } catch(e) {} r(); }, duration * 1000);
         });
     }
 
-    async function playMelody() {
+    async function playMelody(targetNode = null) {
         if (isPlaying) stop();
+        await new Promise(r => setTimeout(r, 100));
+        
         if (melody.length === 0) return;
         isPlaying = true;
         
@@ -157,15 +174,40 @@
             if (!m) continue;
             let freq = freqs[m[2]] * Math.pow(2, parseInt(m[3]) - 1);
             let duration = (4.0 / parseInt(m[1])) / speed;
-            await playTone(freq, duration);
+            await playTone(freq, duration, targetNode);
         }
         isPlaying = false;
     }
 
-    function stop() {
-        isPlaying = false;
-        activeOscs.forEach(o => { try { o.stop(); } catch(e) {} });
-        activeOscs = [];
+    async function exportWav() {
+        if (melody.length === 0) return;
+        wakeAudio();
+        const dest = audioCtx.createMediaStreamDestination();
+        const recorder = new MediaRecorder(dest.stream);
+        const chunks = [];
+        
+        document.getElementById('rec-dot').style.display = 'block';
+        recorder.ondataavailable = e => chunks.push(e.data);
+        recorder.onstop = () => {
+            const blob = new Blob(chunks, { type: 'audio/wav' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = `nokia_ringtone.wav`; a.click();
+            document.getElementById('rec-dot').style.display = 'none';
+        };
+        recorder.start();
+        await playMelody(dest);
+        recorder.stop();
+    }
+
+    function stop() { isPlaying = false; clearHardware(); document.querySelectorAll('.side-glow').forEach(g => g.style.opacity = "0"); }
+
+    function handleKey(n) {
+        wakeAudio();
+        let f = freqs[n] * Math.pow(2, currentOctave - 1);
+        playTone(f, 0.1, null, true); 
+        melody.push(`${currentLength}${n}${currentOctave}`);
+        updateDisplay();
     }
 
     function nextSong() {
@@ -173,22 +215,14 @@
         libIdx = (libIdx + 1) % library.length;
         melody = [...library[libIdx].notes];
         document.getElementById('song-label').innerText = "MELODİ: " + library[libIdx].name;
-        document.getElementById('display-text').innerText = melody.join(' ');
+        updateDisplay();
     }
 
-    function addNote(n) {
-        initAudio();
-        // Tuş sesi için kısa bir bip (0.05 sn)
-        let f = freqs[n] * Math.pow(2, currentOctave - 1);
-        playTone(f, 0.1, true);
-
-        melody.push(`${currentLength}${n}${currentOctave}`);
-        document.getElementById('display-text').innerText = melody.join(' ');
-    }
-
+    function updateDisplay() { document.getElementById('display-text').innerText = melody.join(' '); }
+    
     function cycleLength() {
-        const lengths = [4, 8, 16];
-        currentLength = lengths[(lengths.indexOf(currentLength) + 1) % lengths.length];
+        const ls = [1, 2, 4, 8, 16, 32];
+        currentLength = ls[(ls.indexOf(currentLength) + 1) % ls.length];
         document.getElementById('cur-len').innerText = "Süre: " + currentLength;
     }
 
@@ -198,18 +232,15 @@
     }
 
     function addSharp() {
-        if (melody.length === 0) return;
-        let last = melody[melody.length - 1];
+        if (!melody.length) return;
+        let last = melody[melody.length-1];
         if (!last.includes('#') && !last.includes('p')) {
-            melody[melody.length - 1] = last.replace(/([a-g])/, '$1#');
-            document.getElementById('display-text').innerText = melody.join(' ');
+            melody[melody.length-1] = last.replace(/([a-g])/, '$1#');
+            updateDisplay();
         }
     }
 
-    function clearAll() {
-        stop(); melody = [];
-        document.getElementById('display-text').innerText = "TEMİZLENDİ";
-    }
+    function clearAll() { stop(); melody = []; updateDisplay(); }
 
     function nextSpeed() {
         const lvls = [1.0, 1.5, 2.0, 3.0];
@@ -219,9 +250,10 @@
 
     function flashGlow() {
         const l = document.getElementById('glowL'), r = document.getElementById('glowR');
-        l.style.opacity = "1";
-        l.style.backgroundColor = ["#f00","#0f0","#00f","#ff0"][Math.floor(Math.random()*4)];
-        setTimeout(() => { l.style.opacity = "0"; }, 100);
+        l.style.opacity = r.style.opacity = "1";
+        const c = ["#ff0","#0f0","#f0f","#0ff","#f00"][Math.floor(Math.random()*5)];
+        l.style.backgroundColor = r.style.backgroundColor = c;
+        setTimeout(() => { if(isPlaying) l.style.opacity = r.style.opacity = "0.2"; }, 80);
     }
 </script>
 </body>
